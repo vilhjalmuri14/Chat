@@ -1,5 +1,7 @@
 <h2> {{roomName}} </h2>
 
+<a (click)="leaveRoom()" href="/roomlist">Leave this room</a>
+
 <h3>Messages:</h3>
 <ul>
   <li *ngFor="let msg of messages">
@@ -9,3 +11,5 @@
 
 <input type="text" [(ngModel)]="newMessage" />
 <button (click)="sendMessage()">send</button>
+
+

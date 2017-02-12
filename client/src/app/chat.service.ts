@@ -55,6 +55,10 @@ export class ChatService {
     return observable;
   }
 
+  leaveRoom(roomName : string) {
+    this.socket.emit("partroom", roomName);
+  }
+
   getMessages(roomName : string) : Observable<Object[]> {
     let observable = new Observable( observer => {
       this.socket.on("updatechat", (roomName,messageHistory) => {

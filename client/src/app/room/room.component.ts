@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from "../chat.service";
 import { ActivatedRoute, Params }   from '@angular/router';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-room',
@@ -13,7 +14,7 @@ export class RoomComponent implements OnInit {
   newMessage : string;
   messages : Object[];
 
-  constructor(private chatService: ChatService, private route: ActivatedRoute) { }
+  constructor(private chatService: ChatService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
 
@@ -43,8 +44,14 @@ export class RoomComponent implements OnInit {
       if(!succeeded) {
         // TODO show error message
       }
-    })
+    });
 
     this.newMessage = "";
+  }
+
+  leaveRoom() {
+    this.chatService.leaveRoom(this.roomName);
+  
+    this.router.navigate(["/rooms"]);
   }
 }
