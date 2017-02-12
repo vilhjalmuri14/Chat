@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ChatService } from "../chat.service";
+import { ActivatedRoute, Params }   from '@angular/router';
 
 @Component({
   selector: 'app-room',
@@ -7,9 +9,42 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RoomComponent implements OnInit {
 
-  constructor() { }
+  roomName : string;
+  newMessage : string;
+  messages : Object[];
+
+  constructor(private chatService: ChatService, private route: ActivatedRoute) { }
 
   ngOnInit() {
+
+    this.route.params.subscribe(p => {
+      // get the id variable from the url
+      this.roomName = p['id'];
+
+      //try to join the 
+      this.chatService.joinRoom(this.roomName).subscribe(succeeded => {
+        if(!succeeded) {
+          // TODO show error messages could not connect
+        }
+        else {
+
+          // Get all the messages
+          this.chatService.getMessages(this.roomName).subscribe(lst => {
+            this.messages = lst;
+          });
+        }
+      });
+
+    });
   }
 
+  sendMessage() {
+    this.chatService.sendMessage(this.roomName, this.newMessage).subscribe(succeeded => {
+      if(!succeeded) {
+        // TODO show error message
+      }
+    })
+
+    this.newMessage = "";
+  }
 }

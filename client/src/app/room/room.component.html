@@ -1,3 +1,11 @@
-<p>
-  room works!
-</p>
+<h2> {{roomName}} </h2>
+
+<h3>Messages:</h3>
+<ul>
+  <li *ngFor="let msg of messages">
+    {{msg.message}} --> {{msg.nick}}
+  </li>
+</ul>
+
+<input type="text" [(ngModel)]="newMessage" />
+<button (click)="sendMessage()">send</button>

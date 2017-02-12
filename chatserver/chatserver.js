@@ -279,7 +279,7 @@ io.sockets.on('connection', function (socket) {
 		fn(false);
 	});
 
-	//Password locks the room.
+	//Password locks the room
 	socket.on('setpassword', function (passwordObj, fn) {
 
 		//If user is OP

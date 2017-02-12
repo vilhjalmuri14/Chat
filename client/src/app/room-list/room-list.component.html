@@ -1,5 +1,9 @@
 <ul>
   <li *ngFor="let room of rooms">
-    {{room}}
+    <a [routerLink]="['/room', room]"> {{room}} </a>
   </li>
 </ul>
+
+<h3>Enter a name for new room</h3>
+<input type="text" [(ngModel)]="newRoomName" />
+<button (click)="createRoom()" >Create new room</button>
