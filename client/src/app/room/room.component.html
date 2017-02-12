@@ -1,6 +1,6 @@
 <h2> {{roomName}} </h2>
 
-<a (click)="leaveRoom()" href="/roomlist">Leave this room</a>
+<button (click)="leaveRoom()">Leave this room</button>
 
 <h3>Messages:</h3>
 <ul>
@@ -11,5 +11,12 @@
 
 <input type="text" [(ngModel)]="newMessage" />
 <button (click)="sendMessage()">send</button>
+
+<h3>Users in Chat:</h3>
+<ul>
+  <li *ngFor="let user of users">
+    {{user}}
+  </li>
+</ul>
 
 

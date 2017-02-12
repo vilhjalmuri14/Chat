@@ -24,6 +24,10 @@ export class ChatService {
     return observable;
   }
 
+  logout() {
+    this.socket.emit("disconnect");
+  }
+
   getRoomList() : Observable<string[]> {
     let obs = new Observable(observer => {
       this.socket.emit("rooms");
@@ -59,7 +63,7 @@ export class ChatService {
     this.socket.emit("partroom", roomName);
   }
 
-  getMessages(roomName : string) : Observable<Object[]> {
+  getMessages() : Observable<Object[]> {
     let observable = new Observable( observer => {
       this.socket.on("updatechat", (roomName,messageHistory) => {
         observer.next(messageHistory);
@@ -80,6 +84,21 @@ export class ChatService {
       });
     });
 
+    return observable;
+  }
+
+  getUsers() : Observable<string[]> {
+    let observable = new Observable( observer => {
+      this.socket.on("updateusers", (roomName, users, ops) => {
+
+        let strArr: string[] = [];
+        for(var u in users) {
+          strArr.push(users[u]);
+        }
+
+        observer.next(strArr);
+      });
+    });
     return observable;
   }
 

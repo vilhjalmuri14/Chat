@@ -13,6 +13,7 @@ export class RoomComponent implements OnInit {
   roomName : string;
   newMessage : string;
   messages : Object[];
+  users : Object[];
 
   constructor(private chatService: ChatService, private route: ActivatedRoute, private router: Router) { }
 
@@ -30,8 +31,13 @@ export class RoomComponent implements OnInit {
         else {
 
           // Get all the messages
-          this.chatService.getMessages(this.roomName).subscribe(lst => {
+          this.chatService.getMessages().subscribe(lst => {
             this.messages = lst;
+          });
+
+          // Get the users in the room
+          this.chatService.getUsers().subscribe(lst => {
+            this.users = lst;
           });
         }
       });
