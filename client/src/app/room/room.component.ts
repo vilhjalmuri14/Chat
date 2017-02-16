@@ -45,7 +45,14 @@ export class RoomComponent implements OnInit {
 
           this.chatService.isCreator().subscribe(succeeded => {
             this.isCreator = succeeded;
-          });          
+          });    
+
+          this.chatService.gotKicked().subscribe(succeeded => {
+            if(succeeded === true) {
+              this.chatService.leaveRoom(this.roomName);
+              this.router.navigate(["/rooms"]);
+            }
+          });      
         }
       });
 
@@ -66,5 +73,17 @@ export class RoomComponent implements OnInit {
     this.chatService.leaveRoom(this.roomName);
   
     this.router.navigate(["/rooms"]);
+  }
+
+  banUser(user : string) {
+    console.log(user + " got banned!");
+  }
+
+  kickUser(user : string) {
+    this.chatService.kickUser(user,this.roomName).subscribe(succeeded => {
+      if(!succeeded) {
+        // TODO show error message
+      }
+    });
   }
 }

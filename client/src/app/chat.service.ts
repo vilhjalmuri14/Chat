@@ -92,20 +92,20 @@ export class ChatService {
         let creator = false;
 
         for(var u in ops) {
-          // dont return the current user
           if(ops[u] === this.userName) {
             creator = true;
             this.myRooms.push(roomName);
           }
         }
 
+        /*
         if(creator === false) {
           for(var r in this.myRooms) {
             if(roomName === this.myRooms[r]) {
               creator = true;
             }
           }
-        }
+        }*/
           
         observer.next(creator);
 
@@ -156,6 +156,33 @@ export class ChatService {
         }
 
         observer.next(strArr);
+      });
+    });
+    return observable;
+  }
+
+  kickUser(user : string, roomName : string) : Observable<boolean> {
+    let kickObj = {
+      room : roomName,
+      user : user
+    };
+
+    let observable = new Observable( observer => {
+      this.socket.emit("kick", kickObj, (succeeded) => {
+        observer.next(succeeded);
+      });
+    });
+
+    return observable;
+  }
+
+  // returns true if current user just got kicked
+  gotKicked() : Observable<boolean> {
+    let observable = new Observable( observer => {
+      this.socket.on("kicked", (roomName,kickedUser,roomOwner) => {
+        if(kickedUser === this.userName) {
+          observer.next(true);
+        }
       });
     });
     return observable;

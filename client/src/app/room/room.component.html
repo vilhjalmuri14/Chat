@@ -15,7 +15,9 @@
 <h3>Users in Chat:</h3>
 <ul>
   <li *ngFor="let user of users">
-    {{user}}
+    {{user}} 
+    <button *ngIf="isCreator" (click)="banUser(user)">Ban</button>
+    <button *ngIf="isCreator" (click)="kickUser(user)">Kick</button>
   </li>
 </ul>
 
