@@ -22,7 +22,7 @@ export class RoomListComponent implements OnInit {
 
   createRoom() {
     if(this.newRoomName) {
-      this.router.navigate(["/room", this.newRoomName]);
+      this.router.navigate(["/rooms", this.newRoomName]);
     }
   }
 

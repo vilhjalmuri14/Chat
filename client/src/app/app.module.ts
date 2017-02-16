@@ -34,7 +34,7 @@ import { ChatService } from "./chat.service";
       component: RoomListComponent
     },
     {
-      path: "room/:id",
+      path: "rooms/:id",
       component: RoomComponent
     }])
   ],
