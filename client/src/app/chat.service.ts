@@ -5,6 +5,7 @@ import { Observable } from "rxjs/Observable";
 @Injectable()
 export class ChatService {
   socket : any;
+  userName : string;
 
   constructor() { 
     this.socket = io("http://localhost:8080/");
@@ -17,7 +18,11 @@ export class ChatService {
   login(userName: string) : Observable<boolean> {
     let observable = new Observable( observer => {
         this.socket.emit("adduser", userName, succeeded => {
-          observer.next(succeeded);
+          if(succeeded === true) {
+            this.userName = userName;
+            observer.next(succeeded);
+          }
+          
         });
     });
 
@@ -36,6 +41,25 @@ export class ChatService {
         let strArr: string[] = [];
         for(var x in lst) {
           strArr.push(x);
+        }
+
+        observer.next(strArr);
+      })
+    });
+    return obs;
+  }
+
+  getOnlineUsers() : Observable<string[]> {
+    let obs = new Observable(observer => {
+      this.socket.emit("users");
+      this.socket.on("userlist", (users) => {
+
+        let strArr: string[] = [];
+        for(var u in users) {
+          // dont return the current user
+          if(users[u] !== this.userName) {
+            strArr.push(users[u]);
+          }
         }
 
         observer.next(strArr);
