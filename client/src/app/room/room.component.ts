@@ -15,6 +15,9 @@ export class RoomComponent implements OnInit {
   messages : Object[];
   users : Object[];
 
+  // if current user is the creator of the room
+  isCreator : boolean = false;
+
   constructor(private chatService: ChatService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
@@ -39,6 +42,10 @@ export class RoomComponent implements OnInit {
           this.chatService.getUsers().subscribe(lst => {
             this.users = lst;
           });
+
+          this.chatService.isCreator().subscribe(succeeded => {
+            this.isCreator = succeeded;
+          });          
         }
       });
 

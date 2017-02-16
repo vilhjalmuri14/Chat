@@ -7,6 +7,9 @@ export class ChatService {
   socket : any;
   userName : string;
 
+  // list of rooms current user has created
+  myRooms : string[] = [];
+
   constructor() { 
     this.socket = io("http://localhost:8080/");
 
@@ -76,10 +79,38 @@ export class ChatService {
 
     let observable = new Observable( observer => {
       this.socket.emit("joinroom", roomObj, (succeeded, message) => {
-          observer.next(succeeded);
+        observer.next(succeeded);
       });
     });
 
+    return observable;
+  }
+
+  isCreator() : Observable<boolean> {
+    let observable = new Observable( observer => {
+      this.socket.on("updateusers", (roomName, users, ops) => {
+        let creator = false;
+
+        for(var u in ops) {
+          // dont return the current user
+          if(ops[u] === this.userName) {
+            creator = true;
+            this.myRooms.push(roomName);
+          }
+        }
+
+        if(creator === false) {
+          for(var r in this.myRooms) {
+            if(roomName === this.myRooms[r]) {
+              creator = true;
+            }
+          }
+        }
+          
+        observer.next(creator);
+
+      });
+    });
     return observable;
   }
 
