@@ -111,13 +111,17 @@ export class ChatService {
     return observable;
   }
 
+  // get all the users in the room current user is
   getUsers() : Observable<string[]> {
     let observable = new Observable( observer => {
       this.socket.on("updateusers", (roomName, users, ops) => {
 
         let strArr: string[] = [];
         for(var u in users) {
-          strArr.push(users[u]);
+          // dont return the current user
+          if(users[u] !== this.userName) {
+            strArr.push(users[u]);
+          }
         }
 
         observer.next(strArr);
