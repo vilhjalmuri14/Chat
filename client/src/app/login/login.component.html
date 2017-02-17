@@ -1,6 +1,17 @@
-<input type="text" [(ngModel)]="userName" />
-<button (click)="onLogin()">Login</button>
+<div class="container-fluid">
+  <div class="row">
+    <h1 class="text-center">
+      OnlineChat
+    </h1>
+    <div id="inputBoxDiv" class="row input-group input-group-lg">
+      <input type="text" class="form-control center" placeholder="Username" aria-describedby="sizing-addon1" [(ngModel)]="userName" />
+    </div>
+    <div class="row">
+      <button type="button" class="btn btn-success center" (click)="onLogin()">Login</button>
+    </div>
 
-<div *ngIf="loginFailed">
-  Sorry, but this username is already taken
+    <div class="col-12 alert alert-warning" *ngIf="loginFailed">
+      <p>Sorry, but this username is already taken</p>
+   </div>
+  </div>
 </div>

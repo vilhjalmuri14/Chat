@@ -1,0 +1,29 @@
+.container-fluid {
+	margin-top: 10%;
+}
+
+.row {
+	margin: 0 auto;
+}
+
+button {
+    position:relative;
+	height:45px; 
+    width:250px; 
+    left:50%;
+	margin: 10px -125px;
+}
+
+h1 {
+  font-size: 100pt;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  margin-top: 5%;
+  color: white;
+}
+
+.alert-warning {
+  width: 250px;
+}

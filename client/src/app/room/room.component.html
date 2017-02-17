@@ -1,22 +1,52 @@
-<h2> {{roomName}} </h2>
+<div class="container-fluid">
+  <div class="col-lg-10">
+    <h2> {{roomName}} </h2>
+  </div>
+  <div class="col-lg-2">
+    <button type="button" class="btn btn-danger center" (click)="leaveRoom()">Leave this room</button>
+  </div>
+</div>
 
-<button (click)="leaveRoom()">Leave this room</button>
-
-<h3>Messages:</h3>
-<ul>
-  <li *ngFor="let msg of messages">
-    {{msg.message}} --> {{msg.nick}}
-  </li>
-</ul>
-
-<input type="text" [(ngModel)]="newMessage" />
-<button (click)="sendMessage()">send</button>
-
-<h3>Users in Chat:</h3>
-<ul>
-  <li *ngFor="let user of users">
-    {{user}}
-  </li>
-</ul>
+<div class="container-fluid">
+    <div class="col-lg-8">
+      <h2>Messages</h2>
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Messages</th>
+          </tr>
+        <tbody>
+          <tr *ngFor="let msg of messages">
+            <th>{{msg.nick}}</th>
+            <td>{{msg.message}}</td>
+          </tr>
+        </tbody>
+      </table>
 
 
+
+      <!--<ul class="list-group">
+        <li class ="list-group-item" *ngFor="let msg of messages" [routerLink]="['/rooms', room]">
+          {{msg.message}}  {{msg.nick}}
+        </li>
+      </ul>
+      
+      <h3>Messages:</h3>
+      <ul>
+        <li *ngFor="let msg of messages">
+          {{msg.message}}  {{msg.nick}}
+        </li>
+      </ul>
+-->
+      <input type="text" [(ngModel)]="newMessage" />
+      <button (click)="sendMessage()">send</button>
+    </div>
+    <div class="col-lg-4">
+      <h3>Users in Chat:</h3>
+      <ul>
+        <li *ngFor="let user of users">
+          {{user}}
+        </li>
+      </ul>
+    </div>
+</div>
