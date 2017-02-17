@@ -10,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { RoomListComponent } from './room-list/room-list.component';
 import { RoomComponent } from './room/room.component';
 import { ChatService } from "./chat.service";
+import { ToastComponent } from './toast/toast.component';
 
 let options: ToastOptions = new ToastOptions({
   animate: 'flyRight',
@@ -21,7 +22,8 @@ let options: ToastOptions = new ToastOptions({
     AppComponent,
     LoginComponent,
     RoomListComponent,
-    RoomComponent
+    RoomComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +45,10 @@ let options: ToastOptions = new ToastOptions({
     {
       path: "rooms/:id",
       component: RoomComponent
+    },
+    {
+      path: "toast",
+      component: ToastComponent
     }])
   ],
   providers: [ChatService],
