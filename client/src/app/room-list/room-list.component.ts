@@ -13,10 +13,15 @@ export class RoomListComponent implements OnInit {
 
   rooms: string[];
   newRoomName : string;
+  users: string[];
 
   ngOnInit() {
     this.chatService.getRoomList().subscribe(lst => {
       this.rooms = lst;
+    });
+
+    this.chatService.getOnlineUsers().subscribe(lst => {
+      this.users = lst;
     });
   }
 

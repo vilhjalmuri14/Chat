@@ -8,6 +8,7 @@
 </div>
 
 
+<<<<<<< HEAD
 
 <div class="container-fluid">
   <div class="col-lg-8">
@@ -31,6 +32,18 @@
     </div>
   </div>
 </div>
+
+<h3>Users in Chat:</h3>
+<ul>
+  <li *ngFor="let user of users">
+    {{user}} 
+    <button *ngIf="isCreator" (click)="banUser(user)">Ban</button>
+    <button *ngIf="isCreator" (click)="kickUser(user)">Kick</button>
+  </li>
+</ul>
+
+<h2 *ngIf="isCreator">I am the creator of the room</h2>
+
 
       <!--<ul class="list-group">
         <li class ="list-group-item" *ngFor="let msg of messages" [routerLink]="['/rooms', room]">

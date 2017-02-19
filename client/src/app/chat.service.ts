@@ -5,6 +5,10 @@ import { Observable } from "rxjs/Observable";
 @Injectable()
 export class ChatService {
   socket : any;
+  userName : string;
+
+  // list of rooms current user has created
+  myRooms : string[] = [];
 
   constructor() { 
     this.socket = io("http://localhost:8080/");
@@ -17,7 +21,11 @@ export class ChatService {
   login(userName: string) : Observable<boolean> {
     let observable = new Observable( observer => {
         this.socket.emit("adduser", userName, succeeded => {
-          observer.next(succeeded);
+          if(succeeded === true) {
+            this.userName = userName;
+            observer.next(succeeded);
+          }
+          
         });
     });
 
@@ -44,6 +52,25 @@ export class ChatService {
     return obs;
   }
 
+  getOnlineUsers() : Observable<string[]> {
+    let obs = new Observable(observer => {
+      this.socket.emit("users");
+      this.socket.on("userlist", (users) => {
+
+        let strArr: string[] = [];
+        for(var u in users) {
+          // dont return the current user
+          if(users[u] !== this.userName) {
+            strArr.push(users[u]);
+          }
+        }
+
+        observer.next(strArr);
+      })
+    });
+    return obs;
+  }
+
   joinRoom(roomName : string) : Observable<boolean> {
     let roomObj = {
         room : roomName,
@@ -52,10 +79,38 @@ export class ChatService {
 
     let observable = new Observable( observer => {
       this.socket.emit("joinroom", roomObj, (succeeded, message) => {
-          observer.next(succeeded);
+        observer.next(succeeded);
       });
     });
 
+    return observable;
+  }
+
+  isCreator() : Observable<boolean> {
+    let observable = new Observable( observer => {
+      this.socket.on("updateusers", (roomName, users, ops) => {
+        let creator = false;
+
+        for(var u in ops) {
+          if(ops[u] === this.userName) {
+            creator = true;
+            this.myRooms.push(roomName);
+          }
+        }
+
+        /*
+        if(creator === false) {
+          for(var r in this.myRooms) {
+            if(roomName === this.myRooms[r]) {
+              creator = true;
+            }
+          }
+        }*/
+          
+        observer.next(creator);
+
+      });
+    });
     return observable;
   }
 
@@ -87,16 +142,47 @@ export class ChatService {
     return observable;
   }
 
+  // get all the users in the room current user is
   getUsers() : Observable<string[]> {
     let observable = new Observable( observer => {
       this.socket.on("updateusers", (roomName, users, ops) => {
 
         let strArr: string[] = [];
         for(var u in users) {
-          strArr.push(users[u]);
+          // dont return the current user
+          if(users[u] !== this.userName) {
+            strArr.push(users[u]);
+          }
         }
 
         observer.next(strArr);
+      });
+    });
+    return observable;
+  }
+
+  kickUser(user : string, roomName : string) : Observable<boolean> {
+    let kickObj = {
+      room : roomName,
+      user : user
+    };
+
+    let observable = new Observable( observer => {
+      this.socket.emit("kick", kickObj, (succeeded) => {
+        observer.next(succeeded);
+      });
+    });
+
+    return observable;
+  }
+
+  // returns true if current user just got kicked
+  gotKicked() : Observable<boolean> {
+    let observable = new Observable( observer => {
+      this.socket.on("kicked", (roomName,kickedUser,roomOwner) => {
+        if(kickedUser === this.userName) {
+          observer.next(true);
+        }
       });
     });
     return observable;

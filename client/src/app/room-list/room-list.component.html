@@ -24,3 +24,20 @@
     </ul>
   </div>
 </div>
+<!--
+<ul>
+  <li *ngFor="let room of rooms">
+    <a [routerLink]="['/rooms', room]"> {{room}} </a>
+  </li>
+</ul>
+
+<h3>Enter a name for new room</h3>
+<input type="text" [(ngModel)]="newRoomName" />
+<button (click)="createRoom()" >Create new room</button>
+-->
+<ul>
+  <li *ngFor="let user of users">
+    <a [routerLink]="['/users', user]"> {{user}} </a>
+  </li>
+</ul>
+

@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { ChatService } from "../chat.service";
 import { ActivatedRoute, Params }   from '@angular/router';
 import { Router } from "@angular/router";
+
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'app-room',
@@ -15,7 +17,13 @@ export class RoomComponent implements OnInit {
   messages : Object[];
   users : Object[];
 
-  constructor(private chatService: ChatService, private route: ActivatedRoute, private router: Router) { }
+  // if current user is the creator of the room
+  isCreator : boolean = false;
+
+  constructor(private chatService: ChatService, private route: ActivatedRoute, 
+              private router: Router, public toastr: ToastsManager, vcr: ViewContainerRef) { 
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
 
@@ -39,6 +47,17 @@ export class RoomComponent implements OnInit {
           this.chatService.getUsers().subscribe(lst => {
             this.users = lst;
           });
+
+          this.chatService.isCreator().subscribe(succeeded => {
+            this.isCreator = succeeded;
+          });    
+
+          this.chatService.gotKicked().subscribe(succeeded => {
+            if(succeeded === true) {
+              this.chatService.leaveRoom(this.roomName);
+              this.router.navigate(["/rooms"]);
+            }
+          });      
         }
       });
 
@@ -48,7 +67,7 @@ export class RoomComponent implements OnInit {
   sendMessage() {
     this.chatService.sendMessage(this.roomName, this.newMessage).subscribe(succeeded => {
       if(!succeeded) {
-        // TODO show error message
+        this.toastr.error("Could not send message!", 'Error!');
       }
     });
 
@@ -59,5 +78,20 @@ export class RoomComponent implements OnInit {
     this.chatService.leaveRoom(this.roomName);
   
     this.router.navigate(["/rooms"]);
+  }
+
+  banUser(user : string) {
+    console.log(user + " got banned!");
+  }
+
+  kickUser(user : string) {
+    this.chatService.kickUser(user,this.roomName).subscribe(succeeded => {
+      if(!succeeded) {
+        this.toastr.error("Could not kick " + user + " from room!", 'Error!');
+      }
+      else {
+        this.toastr.success(user + " was kicked from the room!", "Kicked!");
+      }
+    });
   }
 }
