@@ -15,9 +15,10 @@
           <h3 class="panel-title">Messages</h3>
         </div>
         <div class="panel-body" id="chatPanel">
-          <ul class="list-group">
-            <div class="list-group-item" *ngFor="let msg of messages"> {{msg.nick}} --- {{msg.message}}</div>
-          </ul>
+          <div class="list-group-item" *ngFor="let msg of messages">
+            <p id="nick"> {{msg.nick}} </p>
+            <p> {{msg.message}}</p>
+          </div>
         </div>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Write a message" [(ngModel)]="newMessage">
