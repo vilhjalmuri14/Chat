@@ -61,7 +61,15 @@ export class RoomComponent implements OnInit {
               this.chatService.leaveRoom(this.roomName);
               this.router.navigate(["/rooms"]);
             }
-          });      
+          });
+
+          this.chatService.gotBanned().subscribe(succeeded => {
+            // if user is kicked out of the room he goes to room list page
+            if(succeeded === true) {
+              this.chatService.leaveRoom(this.roomName);
+              this.router.navigate(["/rooms"]);
+            }
+          });     
         }
       });
 

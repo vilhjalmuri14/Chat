@@ -8,7 +8,10 @@ export class ChatService {
   userName : string;
 
   // list of rooms current user has created
-  myRooms : string[] = [];
+  myRooms : Object[] = [];
+
+  // 
+  myMessages : { [id : string] : Object[] } = {};
 
   constructor() { 
     this.socket = io("http://localhost:8080/");
@@ -212,6 +215,64 @@ export class ChatService {
         }
       });
     });
+    return observable;
+  }
+
+  getAllMessagesFromUser(user : string) : Object[] {
+    return this.myMessages[user]
+  }
+
+  sendPrivateMessageToUser(user : string, message : string) : Observable<boolean> {
+    let msgObj = {
+      nick : user,
+      message : message
+    };
+
+    let observable = new Observable( observer => {
+      this.socket.emit("privatemsg", msgObj, (succeeded) => {
+
+        let storeObj = {
+          nick : this.userName,
+          message : message
+        };
+
+        if(this.myMessages[user] === undefined) {
+          this.myMessages[user] = [];
+          this.myMessages[user].push(storeObj);
+        }
+        else {
+          this.myMessages[user].push(storeObj);
+        }
+        
+        observer.next(succeeded);
+      });
+    });
+
+    return observable;
+  }
+
+  recievePrivateMessages() : Observable<Object> {
+
+    let observable = new Observable( observer => {
+      this.socket.on("recv_privatemsg", (fromUser, message) => {
+        
+        let msgObj = {
+          nick: fromUser,
+          message: message
+        };
+
+        if(this.myMessages[fromUser] === undefined) {
+          this.myMessages[fromUser] = [];
+          this.myMessages[fromUser].push(msgObj);
+        }
+        else {
+          this.myMessages[fromUser].push(msgObj);
+        }
+
+        observer.next(msgObj);
+      });
+    });
+
     return observable;
   }
 
