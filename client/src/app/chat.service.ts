@@ -188,5 +188,32 @@ export class ChatService {
     return observable;
   }
 
+  banUser(user : string, roomName : string) : Observable<boolean> {
+    let banObj = {
+      room : roomName,
+      user : user
+    };
+
+    let observable = new Observable( observer => {
+      this.socket.emit("ban", banObj, (succeeded) => {
+        observer.next(succeeded);
+      });
+    });
+
+    return observable;
+  }
+
+  // returns true if current user just got banned
+  gotBanned() : Observable<boolean> {
+    let observable = new Observable( observer => {
+      this.socket.on("banned", (roomName,bannedUser,roomOwner) => {
+        if(bannedUser === this.userName) {
+          observer.next(true);
+        }
+      });
+    });
+    return observable;
+  }
+
 
 }
