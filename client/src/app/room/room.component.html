@@ -7,23 +7,30 @@
   </div>
 </div>
 
+
+
 <div class="container-fluid">
-    <div class="col-lg-8">
-      <h2>Messages</h2>
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th>Messages</th>
-          </tr>
-        <tbody>
-          <tr *ngFor="let msg of messages">
-            <th>{{msg.nick}}</th>
-            <td>{{msg.message}}</td>
-          </tr>
-        </tbody>
-      </table>
-
-
+  <div class="col-lg-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">Messages</div>
+      <div class="panel-body">
+        <p *ngFor="let msg of messages"> {{msg.nick}} --- {{msg.message}}</p>
+      </div>
+    </div>
+    <div>
+      <input type="text" [(ngModel)]="newMessage" />
+      <button (click)="sendMessage()">send</button>
+    </div>
+    <div class="col-lg-4">
+      <h3>Users in Chat:</h3>
+      <ul>
+        <li *ngFor="let user of users">
+          {{user}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 
       <!--<ul class="list-group">
         <li class ="list-group-item" *ngFor="let msg of messages" [routerLink]="['/rooms', room]">
@@ -38,15 +45,3 @@
         </li>
       </ul>
 -->
-      <input type="text" [(ngModel)]="newMessage" />
-      <button (click)="sendMessage()">send</button>
-    </div>
-    <div class="col-lg-4">
-      <h3>Users in Chat:</h3>
-      <ul>
-        <li *ngFor="let user of users">
-          {{user}}
-        </li>
-      </ul>
-    </div>
-</div>
