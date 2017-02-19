@@ -2,7 +2,11 @@ h2 {
 	color: white;
 }
 
-.btn-danger {
+#leaveRoomButton {
 	float: right;
 	margin-top: 20px;
+}
+
+#usersListGroup {
+	width: 100%;
 }

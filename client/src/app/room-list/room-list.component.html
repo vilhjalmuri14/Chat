@@ -20,24 +20,8 @@
   <div class="col-lg-4">
     <h2>Online Users</h2>
     <ul class="list-group">
-      <a class ="list-group-item" *ngFor="let room of rooms" [routerLink]="['/rooms', room]"> {{room}} </a>
+      <a class ="list-group-item" *ngFor="let user of users" [routerLink]="['/users', user]"> {{user}} </a>
     </ul>
   </div>
 </div>
-<!--
-<ul>
-  <li *ngFor="let room of rooms">
-    <a [routerLink]="['/rooms', room]"> {{room}} </a>
-  </li>
-</ul>
-
-<h3>Enter a name for new room</h3>
-<input type="text" [(ngModel)]="newRoomName" />
-<button (click)="createRoom()" >Create new room</button>
--->
-<ul>
-  <li *ngFor="let user of users">
-    <a [routerLink]="['/users', user]"> {{user}} </a>
-  </li>
-</ul>
 

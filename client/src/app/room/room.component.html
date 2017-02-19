@@ -3,36 +3,48 @@
     <h2> {{roomName}} </h2>
   </div>
   <div class="col-lg-2">
-    <button type="button" class="btn btn-danger center" (click)="leaveRoom()">Leave this room</button>
+    <button type="button" id="leaveRoomButton" class="btn btn-danger center" (click)="leaveRoom()">Leave this room</button>
   </div>
 </div>
-
-
-<<<<<<< HEAD
 
 <div class="container-fluid">
-  <div class="col-lg-8">
-    <div class="panel panel-default">
-      <div class="panel-heading">Messages</div>
-      <div class="panel-body">
-        <p *ngFor="let msg of messages"> {{msg.nick}} --- {{msg.message}}</p>
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Messages</h3>
+        </div>
+          <ul class="list-group">
+            <div class="list-group-item" *ngFor="let msg of messages"> {{msg.nick}} --- {{msg.message}}</div>
+          </ul>
+        <div>
+          <input type="text" [(ngModel)]="newMessage" />
+          <button (click)="sendMessage()">send</button>
+        </div>
       </div>
     </div>
-    <div>
-      <input type="text" [(ngModel)]="newMessage" />
-      <button (click)="sendMessage()">send</button>
-    </div>
     <div class="col-lg-4">
-      <h3>Users in Chat:</h3>
-      <ul>
-        <li *ngFor="let user of users">
-          {{user}}
-        </li>
-      </ul>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Users in the room</h3>
+        </div>
+        <ul class="list-group">
+          <div class="list-group-item" *ngFor="let user of users">
+            <span>
+              {{user}}
+            </span>
+            <span class="btn-group" role="group">
+              <button type="button" class="btn btn-warning" *ngIf="isCreator" (click)="kickUser(user)">Kick</button>
+              <button type="button" class="btn btn-danger" *ngIf="isCreator" (click)="banUser(user)">Ban</button>
+            </span>
+          </div>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
 
+<!--
 <h3>Users in Chat:</h3>
 <ul>
   <li *ngFor="let user of users">
@@ -41,7 +53,7 @@
     <button *ngIf="isCreator" (click)="kickUser(user)">Kick</button>
   </li>
 </ul>
-
+-->
 <h2 *ngIf="isCreator">I am the creator of the room</h2>
 
 
