@@ -34,7 +34,10 @@ export class RoomComponent implements OnInit {
       //try to join the 
       this.chatService.joinRoom(this.roomName).subscribe(succeeded => {
         if(!succeeded) {
-          // TODO show error messages could not connect
+          // if you could not connect to the room then 
+          // user is redirected to room list page
+          this.chatService.leaveRoom(this.roomName);
+          this.router.navigate(["/rooms"]);
         }
         else {
 
@@ -53,11 +56,20 @@ export class RoomComponent implements OnInit {
           });    
 
           this.chatService.gotKicked().subscribe(succeeded => {
+            // if user is kicked out of the room he goes to room list page
             if(succeeded === true) {
               this.chatService.leaveRoom(this.roomName);
               this.router.navigate(["/rooms"]);
             }
-          });      
+          });
+
+          this.chatService.gotBanned().subscribe(succeeded => {
+            // if user is kicked out of the room he goes to room list page
+            if(succeeded === true) {
+              this.chatService.leaveRoom(this.roomName);
+              this.router.navigate(["/rooms"]);
+            }
+          });     
         }
       });
 
@@ -81,11 +93,18 @@ export class RoomComponent implements OnInit {
   }
 
   banUser(user : string) {
-    console.log(user + " got banned!");
+    this.chatService.banUser(user, this.roomName).subscribe(succeeded => {
+      if(!succeeded) {
+        this.toastr.error("Could not ban " + user + " from room!", 'Error!');
+      }
+      else {
+        this.toastr.success(user + " was banned from the room!", "Kicked!");
+      }
+    });
   }
 
   kickUser(user : string) {
-    this.chatService.kickUser(user,this.roomName).subscribe(succeeded => {
+    this.chatService.kickUser(user, this.roomName).subscribe(succeeded => {
       if(!succeeded) {
         this.toastr.error("Could not kick " + user + " from room!", 'Error!');
       }

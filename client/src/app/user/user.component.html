@@ -1,0 +1,14 @@
+<h2>
+  Chatting with {{user}}
+</h2>
+
+<h3>Messages:</h3>
+<ul>
+  <li *ngFor="let msg of messages">
+    {{msg.nick}} --> {{msg.message}}
+  </li>
+</ul>
+
+<input type="text" [(ngModel)]="newMessage" />
+<button (click)="sendMessage()">send</button>
+
