@@ -1,27 +1,31 @@
 <div class="container-fluid">
-  <div class="row">
-    <h1>OnlineChat</h1>
-  </div>
-  <div class="col-lg-4">
-    <h2>Rooms</h2>
-    <ul class="list-group">
-      <a class ="list-group-item" *ngFor="let room of rooms" [routerLink]="['/rooms', room]"> {{room}} </a>
-    </ul>
-  </div>
   <div class="col-lg-4">
     <h2>Create a room</h2>
     <div class="input-group input-group-lg">
       <input type="text" class="form-control center" placeholder="Title" [(ngModel)]="newRoomName" />
       <span class="input-group-btn">
-        <button (click)="createRoom()" class="btn btn-secondary" type="button">Create</button>
+        <button class="btn btn-primary" (click)="createRoom()" type="button">Create</button>
       </span>
     </div>
   </div>
   <div class="col-lg-4">
-    <h2>Online Users</h2>
-    <ul class="list-group">
-      <a class ="list-group-item" *ngFor="let user of users" [routerLink]="['/users', user]"> {{user}} </a>
-    </ul>
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Rooms</h3>
+      </div>
+        <ul class="list-group">
+          <a class="list-group-item" *ngFor="let room of rooms" [routerLink]="['/rooms', room]"> {{room}}</a>
+        </ul>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Online Users</h3>
+      </div>
+        <ul class="list-group">
+          <a class ="list-group-item" *ngFor="let user of users" [routerLink]="['/users', user]"> {{user}} </a>
+        </ul>
+    </div>
   </div>
 </div>
-

@@ -1,14 +1,31 @@
-<h2>
-  Chatting with {{user}}
-</h2>
+<div class="bg-info container-fluid" id="miniHeader">
+  <div class="col-lg-10">
+    <h1> {{user}} </h1>
+  </div>
+  <div class="col-lg-2">
+    <button type="button" id="leaveRoomButton" class="btn btn-danger center" (click)="leaveRoom()">Leave {{user}}</button>
+  </div>
+</div>
 
-<h3>Messages:</h3>
-<ul>
-  <li *ngFor="let msg of messages">
-    {{msg.nick}} --> {{msg.message}}
-  </li>
-</ul>
-
-<input type="text" [(ngModel)]="newMessage" />
-<button (click)="sendMessage()">send</button>
-
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Messages</h3>
+        </div>
+        <div class="panel-body" id="chatPanel">
+          <ul class="list-group">
+            <div class="list-group-item" *ngFor="let msg of messages"> {{msg.nick}} --- {{msg.message}}</div>
+          </ul>
+        </div>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Write a message" [(ngModel)]="newMessage">
+          <span class="input-group-btn">
+            <button class="btn btn-secondary" type="button" (click)="sendMessage(); scrollToBottom('chatPanel');">Send</button>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

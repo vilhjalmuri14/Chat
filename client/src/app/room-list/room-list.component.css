@@ -1,13 +1,7 @@
-h1 {
-  font-size: 50pt;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  margin-top: 2%;
-  color: white;
+h2 {
+  margin-top: 0;
 }
 
-h2 {
-	color: white;
+.container-fluid {
+  margin-top: 10px;
 }

@@ -86,6 +86,11 @@ export class RoomComponent implements OnInit {
     this.newMessage = "";
   }
 
+  scrollToBottom(id) {
+    var element = document.getElementById(id);
+    element.scrollTop = element.scrollHeight - element.clientHeight;
+  }
+
   leaveRoom() {
     this.chatService.leaveRoom(this.roomName);
   

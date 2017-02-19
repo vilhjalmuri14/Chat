@@ -1,6 +1,7 @@
-<div class="container-fluid">
+<div class="bg-info container-fluid" id="miniHeader">
   <div class="col-lg-10">
-    <h2> {{roomName}} </h2>
+    <h1> {{roomName}} </h1>
+    <h2 *ngIf="isCreator">I am the creator of the room</h2>
   </div>
   <div class="col-lg-2">
     <button type="button" id="leaveRoomButton" class="btn btn-danger center" (click)="leaveRoom()">Leave this room</button>
@@ -10,35 +11,41 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-8">
-      <div class="panel panel-default">
+      <div class="panel panel-primary">
         <div class="panel-heading">
           <h3 class="panel-title">Messages</h3>
         </div>
+        <div class="panel-body" id="chatPanel">
           <ul class="list-group">
             <div class="list-group-item" *ngFor="let msg of messages"> {{msg.nick}} --- {{msg.message}}</div>
           </ul>
-        <div>
-          <input type="text" [(ngModel)]="newMessage" />
-          <button (click)="sendMessage()">send</button>
+        </div>
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Write a message" [(ngModel)]="newMessage">
+          <span class="input-group-btn">
+            <button class="btn btn-secondary" type="button" (click)="sendMessage(); scrollToBottom('chatPanel');" >Send</button>
+          </span>
         </div>
       </div>
     </div>
     <div class="col-lg-4">
-      <div class="panel panel-default">
+      <div class="panel panel-primary">
         <div class="panel-heading">
           <h3 class="panel-title">Users in the room</h3>
         </div>
-        <ul class="list-group">
-          <div class="list-group-item" *ngFor="let user of users">
-            <span>
-              {{user}}
-            </span>
-            <span class="btn-group" role="group">
-              <button type="button" class="btn btn-warning" *ngIf="isCreator" (click)="kickUser(user)">Kick</button>
-              <button type="button" class="btn btn-danger" *ngIf="isCreator" (click)="banUser(user)">Ban</button>
-            </span>
-          </div>
-        </ul>
+        <div class="panel-body">
+          <ul class="list-group">
+            <div class="list-group-item" *ngFor="let user of users">
+              <span>
+                {{user}}
+              </span>
+              <span class="btn-group" role="group">
+                <button type="button" class="btn btn-warning" *ngIf="isCreator" (click)="kickUser(user)">Kick</button>
+                <button type="button" class="btn btn-danger" *ngIf="isCreator" (click)="banUser(user)">Ban</button>
+              </span>
+            </div>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -53,11 +60,10 @@
     <button *ngIf="isCreator" (click)="kickUser(user)">Kick</button>
   </li>
 </ul>
--->
 <h2 *ngIf="isCreator">I am the creator of the room</h2>
 
 
-      <!--<ul class="list-group">
+      <ul class="list-group">
         <li class ="list-group-item" *ngFor="let msg of messages" [routerLink]="['/rooms', room]">
           {{msg.message}}  {{msg.nick}}
         </li>

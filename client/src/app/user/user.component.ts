@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Params }   from '@angular/router';
 import { ChatService } from "../chat.service";
+import { Router } from "@angular/router";
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
   selector: 'app-user',
@@ -15,7 +17,10 @@ export class UserComponent implements OnInit {
   newMessage: string;
   messages: Object[] = [];
 
-  constructor(private chatService: ChatService, private route: ActivatedRoute) { }
+  constructor(private chatService: ChatService, private route: ActivatedRoute, 
+              private router: Router, public toastr: ToastsManager, vcr: ViewContainerRef) { 
+    this.toastr.setRootViewContainerRef(vcr);
+  }
 
   ngOnInit() {
 
@@ -33,6 +38,15 @@ export class UserComponent implements OnInit {
     });
   }
 
+  leaveUser() {  
+    this.router.navigate(["/rooms"]);
+  }
+
+  scrollToBottom(id) {
+    var element = document.getElementById(id);
+    element.scrollTop = element.scrollHeight - element.clientHeight;
+  }
+
   sendMessage() {
     this.chatService.sendPrivateMessageToUser(this.user, this.newMessage).subscribe(succeeded => {
       if(!succeeded) {
@@ -43,6 +57,8 @@ export class UserComponent implements OnInit {
         this.messages = this.chatService.getAllMessagesFromUser(this.user);
       }
     });
+
+    
 
     this.newMessage = "";
   }
