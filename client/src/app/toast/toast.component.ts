@@ -2,7 +2,7 @@ import { Component, ViewContainerRef } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
-  selector: 'awesome-component',
+  selector: 'app-awesome-component',
   templateUrl: './toast.component.html',
   styleUrls: ['./toast.component.css']
 })

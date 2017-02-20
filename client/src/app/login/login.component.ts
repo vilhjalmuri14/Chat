@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   userName: string;
-  loginFailed: false;
+  loginFailed: Boolean = false;
 
   constructor(private chatService: ChatService,
     private router: Router) {
@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
 
         if (succeeded === true) {
           this.router.navigate(['/rooms']);
-          // TODO Redirect to RoomList component
         }
       });
     }

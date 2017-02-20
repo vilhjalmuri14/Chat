@@ -13,12 +13,12 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 export class RoomComponent implements OnInit {
 
   roomName : string;
-  newMessage : string = "";
+  newMessage  = '';
   messages : Object[];
   users : Object[];
 
   // if current user is the creator of the room
-  isCreator: false;
+  isCreator: Boolean = false;
 
   constructor(private chatService: ChatService, private route: ActivatedRoute,
               private router: Router, public toastr: ToastsManager, vcr: ViewContainerRef) {
@@ -49,21 +49,21 @@ export class RoomComponent implements OnInit {
             this.users = lst;
           });
 
-          this.chatService.isCreator().subscribe(succeeded => {
-            this.isCreator = succeeded;
+          this.chatService.isCreator().subscribe(isCreator => {
+            this.isCreator = isCreator;
           });
 
-          this.chatService.gotKicked().subscribe(succeeded => {
+          this.chatService.gotKicked().subscribe(gotKicked => {
             // if user is kicked out of the room he goes to room list page
-            if (succeeded === true) {
+            if (gotKicked === true) {
               this.chatService.leaveRoom(this.roomName);
               this.router.navigate(['/rooms']);
             }
           });
 
-          this.chatService.gotBanned().subscribe(succeeded => {
+          this.chatService.gotBanned().subscribe(gotBanned => {
             // if user is kicked out of the room he goes to room list page
-            if (succeeded === true) {
+            if (gotBanned === true) {
               this.chatService.leaveRoom(this.roomName);
               this.router.navigate(['/rooms']);
             }
@@ -75,26 +75,15 @@ export class RoomComponent implements OnInit {
   }
 
   sendMessage() {
-<<<<<<< HEAD
-
-    if(this.newMessage !== "") {
+    if(this.newMessage !== '') {
       this.chatService.sendMessage(this.roomName, this.newMessage).subscribe(succeeded => {
         if(!succeeded) {
-          this.toastr.error("Could not send message!", 'Error!');
+          this.toastr.error('Could not send message!', 'Error!');
         }
       });
 
-      this.newMessage = "";
+      this.newMessage = '';
     }
-=======
-    this.chatService.sendMessage(this.roomName, this.newMessage).subscribe(succeeded => {
-      if (!succeeded) {
-        this.toastr.error('Could not send message!', 'Error!');
-      }
-    });
-
-    this.newMessage = '';
->>>>>>> 59828ed466c9c942cb889b73d47e0f047f215a24
   }
 
   scrollToBottom(id) {

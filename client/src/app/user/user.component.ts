@@ -30,12 +30,6 @@ export class UserComponent implements OnInit {
 
       this.messages = this.chatService.getAllMessagesFromUser(this.user);
 
-      // Get all the messages from user
-      /*
-      this.chatService.recievePrivateMessages().subscribe(msgObj => {
-        this.messages = this.chatService.getAllMessagesFromUser(this.user);
-      });*/
-
     });
   }
 
@@ -49,17 +43,16 @@ export class UserComponent implements OnInit {
   }
 
   sendMessage() {
-    if(this.newMessage !== "") {
+    if(this.newMessage !== '') {
         this.chatService.sendPrivateMessageToUser(this.user, this.newMessage).subscribe(succeeded => {
         if(!succeeded) {
           // todo send toaster
-        }
-        else {
+        } else {
           // refresh the chat
           this.messages = this.chatService.getAllMessagesFromUser(this.user);
         }
       });
-      this.newMessage = "";
+      this.newMessage = '';
     }
   }
 }

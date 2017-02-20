@@ -11,14 +11,14 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 })
 export class RoomListComponent implements OnInit {
 
+  rooms: string[];
+  newRoomName: string;
+  users: string[];
+
   constructor(private chatService: ChatService, private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
       this.toastr.setRootViewContainerRef(vcr);
   }
-
-  rooms: string[];
-  newRoomName: string;
-  users: string[];
 
   ngOnInit() {
     this.chatService.getRoomList().subscribe(lst => {
@@ -30,7 +30,7 @@ export class RoomListComponent implements OnInit {
     });
 
     this.chatService.recievePrivateMessages().subscribe(msgObj => {
-      // Show toaster
+      this.toastr.success(msgObj.message, 'Message from ' + msgObj.nick);
     });
   }
 

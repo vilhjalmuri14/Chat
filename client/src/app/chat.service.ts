@@ -43,8 +43,10 @@ export class ChatService {
       this.socket.on('roomlist', (lst) => {
 
         const strArr: string[] = [];
-        for (const x in lst) {
-          strArr.push(x);
+        for(const x in lst) {
+          if(x !== undefined) {
+            strArr.push(x);
+          }
         }
 
         observer.next(strArr);
@@ -90,7 +92,7 @@ export class ChatService {
   isCreator(): Observable<boolean> {
     const observable = new Observable( observer => {
       this.socket.on('updateusers', (roomName, users, ops) => {
-        const creator = false;
+        let creator = false;
 
         for (const u in ops) {
           if (ops[u] === this.userName) {
@@ -145,18 +147,12 @@ export class ChatService {
     const observable = new Observable( observer => {
       this.socket.on('updateusers', (roomName, users, ops) => {
 
-<<<<<<< HEAD
-        let strArr: string[] = [];
-        for(var u in users) {
-          strArr.push(users[u]);
-=======
         const strArr: string[] = [];
         for (const u in users) {
           // dont return the current user
           if (users[u] !== this.userName) {
             strArr.push(users[u]);
           }
->>>>>>> 59828ed466c9c942cb889b73d47e0f047f215a24
         }
 
         observer.next(strArr);
@@ -231,37 +227,36 @@ export class ChatService {
 
     const observable = new Observable( observer => {
       this.socket.emit('privatemsg', msgObj, (succeeded) => {
-
         this.addToMyMessages(user,this.userName, message);
-        
+
         observer.next(succeeded);
       });
     });
     return observable;
   }
 
-  recievePrivateMessages(): Observable<Object> {
+  recievePrivateMessages(): Observable<any> {
 
-    let observable = new Observable( observer => {
-      this.socket.on("recv_privatemsg", (fromUser, message) => {
+    const observable = new Observable( observer => {
+      this.socket.on('recv_privatemsg', (fromUser, message) => {
 
-        let msgObj = {
+        const msgObj = {
           nick: fromUser,
           message: message
         };
 
-        this.addToMyMessages(fromUser,fromUser, message);
-
-        observer.next(msgObj);
+        if(this.addToMyMessages(fromUser,fromUser, message)) {
+          observer.next(msgObj);
+        }
       });
     });
     return observable;
   }
 
   // helper function to keep track of messages
-  addToMyMessages(user : string, FromUser : string, message : string) {
+  addToMyMessages(user : string, FromUser : string, message : string) : boolean {
 
-    let msgObj = {
+    const msgObj = {
       nick: FromUser,
       message: message
     };
@@ -269,16 +264,18 @@ export class ChatService {
     if(this.myMessages[user] === undefined) {
       this.myMessages[user] = [];
       this.myMessages[user].push(msgObj);
-    }
-    else {
-      let lastMessage: any = this.myMessages[user].pop();
-      
-      if(lastMessage.nick !== msgObj.nick && lastMessage.message !== msgObj.message) {
+    } else {
+      const lastMessage: any = this.myMessages[user].pop();
+
+      if(lastMessage.nick !== msgObj.nick || lastMessage.message !== msgObj.message) {
         this.myMessages[user].push(lastMessage);
         this.myMessages[user].push(msgObj);
-      }
-      else {
+
+        return true;
+      } else {
         this.myMessages[user].push(lastMessage);
+
+        return false;
       }
     }
   }
