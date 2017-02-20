@@ -152,10 +152,7 @@ export class ChatService {
 
         let strArr: string[] = [];
         for(var u in users) {
-          // dont return the current user
-          if(users[u] !== this.userName) {
-            strArr.push(users[u]);
-          }
+          strArr.push(users[u]);
         }
 
         observer.next(strArr);
@@ -231,18 +228,7 @@ export class ChatService {
     let observable = new Observable( observer => {
       this.socket.emit("privatemsg", msgObj, (succeeded) => {
 
-        let storeObj = {
-          nick : this.userName,
-          message : message
-        };
-
-        if(this.myMessages[user] === undefined) {
-          this.myMessages[user] = [];
-          this.myMessages[user].push(storeObj);
-        }
-        else {
-          this.myMessages[user].push(storeObj);
-        }
+        this.addToMyMessages(user,this.userName, message);
         
         observer.next(succeeded);
       });
@@ -255,25 +241,44 @@ export class ChatService {
 
     let observable = new Observable( observer => {
       this.socket.on("recv_privatemsg", (fromUser, message) => {
-        
+
         let msgObj = {
           nick: fromUser,
           message: message
         };
 
-        if(this.myMessages[fromUser] === undefined) {
-          this.myMessages[fromUser] = [];
-          this.myMessages[fromUser].push(msgObj);
-        }
-        else {
-          this.myMessages[fromUser].push(msgObj);
-        }
+        this.addToMyMessages(fromUser,fromUser, message);
 
         observer.next(msgObj);
       });
     });
 
     return observable;
+  }
+
+  // helper function to keep track of messages
+  addToMyMessages(user : string, FromUser : string, message : string) {
+
+    let msgObj = {
+      nick: FromUser,
+      message: message
+    };
+
+    if(this.myMessages[user] === undefined) {
+      this.myMessages[user] = [];
+      this.myMessages[user].push(msgObj);
+    }
+    else {
+      let lastMessage: any = this.myMessages[user].pop();
+      
+      if(lastMessage.nick !== msgObj.nick && lastMessage.message !== msgObj.message) {
+        this.myMessages[user].push(lastMessage);
+        this.myMessages[user].push(msgObj);
+      }
+      else {
+        this.myMessages[user].push(lastMessage);
+      }
+    }
   }
 
 

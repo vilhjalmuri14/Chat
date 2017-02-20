@@ -13,7 +13,7 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 export class RoomComponent implements OnInit {
 
   roomName : string;
-  newMessage : string;
+  newMessage : string = "";
   messages : Object[];
   users : Object[];
 
@@ -77,13 +77,16 @@ export class RoomComponent implements OnInit {
   }
 
   sendMessage() {
-    this.chatService.sendMessage(this.roomName, this.newMessage).subscribe(succeeded => {
-      if(!succeeded) {
-        this.toastr.error("Could not send message!", 'Error!');
-      }
-    });
 
-    this.newMessage = "";
+    if(this.newMessage !== "") {
+      this.chatService.sendMessage(this.roomName, this.newMessage).subscribe(succeeded => {
+        if(!succeeded) {
+          this.toastr.error("Could not send message!", 'Error!');
+        }
+      });
+
+      this.newMessage = "";
+    }
   }
 
   scrollToBottom(id) {
