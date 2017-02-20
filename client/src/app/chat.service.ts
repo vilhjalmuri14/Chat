@@ -1,34 +1,32 @@
 import { Injectable } from '@angular/core';
-import * as io from "socket.io-client";
-import { Observable } from "rxjs/Observable";
+import * as io from 'socket.io-client';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ChatService {
-  socket : any;
-  userName : string;
+  socket: any;
+  userName: string;
 
   // list of rooms current user has created
-  myRooms : Object[] = [];
+  myRooms: Object[] = [];
 
-  // 
-  myMessages : { [id : string] : Object[] } = {};
+  myMessages: { [id: string]: Object[] } = {};
 
-  constructor() { 
-    this.socket = io("http://localhost:8080/");
+  constructor() {
+    this.socket = io('http://localhost:8080/');
 
-    this.socket.on("connect", function(){
-      console.log("connect");
+    this.socket.on('connect', function(){
+      console.log('connect');
     });
   }
 
-  login(userName: string) : Observable<boolean> {
-    let observable = new Observable( observer => {
-        this.socket.emit("adduser", userName, succeeded => {
-          if(succeeded === true) {
+  login(userName: string): Observable<boolean> {
+    const observable = new Observable( observer => {
+        this.socket.emit('adduser', userName, succeeded => {
+          if (succeeded === true) {
             this.userName = userName;
             observer.next(succeeded);
           }
-          
         });
     });
 
@@ -36,52 +34,52 @@ export class ChatService {
   }
 
   logout() {
-    this.socket.emit("disconnect");
+    this.socket.emit('disconnect');
   }
 
-  getRoomList() : Observable<string[]> {
-    let obs = new Observable(observer => {
-      this.socket.emit("rooms");
-      this.socket.on("roomlist", (lst) => {
+  getRoomList(): Observable<string[]> {
+    const obs = new Observable(observer => {
+      this.socket.emit('rooms');
+      this.socket.on('roomlist', (lst) => {
 
-        let strArr: string[] = [];
-        for(var x in lst) {
+        const strArr: string[] = [];
+        for (const x in lst) {
           strArr.push(x);
         }
 
         observer.next(strArr);
-      })
+      });
     });
     return obs;
   }
 
-  getOnlineUsers() : Observable<string[]> {
-    let obs = new Observable(observer => {
-      this.socket.emit("users");
-      this.socket.on("userlist", (users) => {
+  getOnlineUsers(): Observable<string[]> {
+    const obs = new Observable(observer => {
+      this.socket.emit('users');
+      this.socket.on('userlist', (users) => {
 
-        let strArr: string[] = [];
-        for(var u in users) {
+        const strArr: string[] = [];
+        for (const u in users) {
           // dont return the current user
-          if(users[u] !== this.userName) {
+          if (users[u] !== this.userName) {
             strArr.push(users[u]);
           }
         }
 
         observer.next(strArr);
-      })
+      });
     });
     return obs;
   }
 
-  joinRoom(roomName : string) : Observable<boolean> {
-    let roomObj = {
-        room : roomName,
-        pass : undefined
+  joinRoom(roomName: string): Observable<boolean> {
+    const roomObj = {
+        room: roomName,
+        pass: undefined
     };
 
-    let observable = new Observable( observer => {
-      this.socket.emit("joinroom", roomObj, (succeeded, message) => {
+    const observable = new Observable( observer => {
+      this.socket.emit('joinroom', roomObj, (succeeded, message) => {
         observer.next(succeeded);
       });
     });
@@ -89,55 +87,52 @@ export class ChatService {
     return observable;
   }
 
-  isCreator() : Observable<boolean> {
-    let observable = new Observable( observer => {
-      this.socket.on("updateusers", (roomName, users, ops) => {
-        let creator = false;
+  isCreator(): Observable<boolean> {
+    const observable = new Observable( observer => {
+      this.socket.on('updateusers', (roomName, users, ops) => {
+        const creator = false;
 
-        for(var u in ops) {
-          if(ops[u] === this.userName) {
+        for (const u in ops) {
+          if (ops[u] === this.userName) {
             creator = true;
             this.myRooms.push(roomName);
           }
         }
-
         /*
-        if(creator === false) {
-          for(var r in this.myRooms) {
-            if(roomName === this.myRooms[r]) {
+        if (creator === false) {
+          for (var r in this.myRooms) {
+            if (roomName === this.myRooms[r]) {
               creator = true;
             }
           }
         }*/
-          
         observer.next(creator);
-
       });
     });
     return observable;
   }
 
-  leaveRoom(roomName : string) {
-    this.socket.emit("partroom", roomName);
+  leaveRoom(roomName: string) {
+    this.socket.emit('partroom', roomName);
   }
 
-  getMessages() : Observable<Object[]> {
-    let observable = new Observable( observer => {
-      this.socket.on("updatechat", (roomName,messageHistory) => {
+  getMessages(): Observable<Object[]> {
+    const observable = new Observable( observer => {
+      this.socket.on('updatechat', (roomName, messageHistory) => {
         observer.next(messageHistory);
       });
     });
     return observable;
   }
 
-  sendMessage(roomName : string, message : string) : Observable<boolean> {
-    let msgObj = {
-      roomName : roomName,
-      msg : message
+  sendMessage(roomName: string, message: string): Observable<boolean> {
+    const msgObj = {
+      roomName: roomName,
+      msg: message
     };
 
-    let observable = new Observable( observer => {
-      this.socket.emit("sendmsg", msgObj, (succeeded) => {
+    const observable = new Observable( observer => {
+      this.socket.emit('sendmsg', msgObj, (succeeded) => {
         observer.next(succeeded);
       });
     });
@@ -146,13 +141,22 @@ export class ChatService {
   }
 
   // get all the users in the room current user is
-  getUsers() : Observable<string[]> {
-    let observable = new Observable( observer => {
-      this.socket.on("updateusers", (roomName, users, ops) => {
+  getUsers(): Observable<string[]> {
+    const observable = new Observable( observer => {
+      this.socket.on('updateusers', (roomName, users, ops) => {
 
+<<<<<<< HEAD
         let strArr: string[] = [];
         for(var u in users) {
           strArr.push(users[u]);
+=======
+        const strArr: string[] = [];
+        for (const u in users) {
+          // dont return the current user
+          if (users[u] !== this.userName) {
+            strArr.push(users[u]);
+          }
+>>>>>>> 59828ed466c9c942cb889b73d47e0f047f215a24
         }
 
         observer.next(strArr);
@@ -161,14 +165,14 @@ export class ChatService {
     return observable;
   }
 
-  kickUser(user : string, roomName : string) : Observable<boolean> {
-    let kickObj = {
-      room : roomName,
-      user : user
+  kickUser(user: string, roomName: string): Observable<boolean> {
+    const kickObj = {
+      room: roomName,
+      user: user
     };
 
-    let observable = new Observable( observer => {
-      this.socket.emit("kick", kickObj, (succeeded) => {
+    const observable = new Observable( observer => {
+      this.socket.emit('kick', kickObj, (succeeded) => {
         observer.next(succeeded);
       });
     });
@@ -177,10 +181,10 @@ export class ChatService {
   }
 
   // returns true if current user just got kicked
-  gotKicked() : Observable<boolean> {
-    let observable = new Observable( observer => {
-      this.socket.on("kicked", (roomName,kickedUser,roomOwner) => {
-        if(kickedUser === this.userName) {
+  gotKicked(): Observable<boolean> {
+    const observable = new Observable( observer => {
+      this.socket.on('kicked', (roomName, kickedUser, roomOwner) => {
+        if (kickedUser === this.userName) {
           observer.next(true);
         }
       });
@@ -188,14 +192,14 @@ export class ChatService {
     return observable;
   }
 
-  banUser(user : string, roomName : string) : Observable<boolean> {
-    let banObj = {
-      room : roomName,
-      user : user
+  banUser(user: string, roomName: string): Observable<boolean> {
+    const banObj = {
+      room: roomName,
+      user: user
     };
 
-    let observable = new Observable( observer => {
-      this.socket.emit("ban", banObj, (succeeded) => {
+    const observable = new Observable( observer => {
+      this.socket.emit('ban', banObj, (succeeded) => {
         observer.next(succeeded);
       });
     });
@@ -204,10 +208,10 @@ export class ChatService {
   }
 
   // returns true if current user just got banned
-  gotBanned() : Observable<boolean> {
-    let observable = new Observable( observer => {
-      this.socket.on("banned", (roomName,bannedUser,roomOwner) => {
-        if(bannedUser === this.userName) {
+  gotBanned(): Observable<boolean> {
+    const observable = new Observable( observer => {
+      this.socket.on('banned', (roomName, bannedUser, roomOwner) => {
+        if (bannedUser === this.userName) {
           observer.next(true);
         }
       });
@@ -215,29 +219,28 @@ export class ChatService {
     return observable;
   }
 
-  getAllMessagesFromUser(user : string) : Object[] {
-    return this.myMessages[user]
+  getAllMessagesFromUser(user: string): Object[] {
+    return this.myMessages[user];
   }
 
-  sendPrivateMessageToUser(user : string, message : string) : Observable<boolean> {
-    let msgObj = {
-      nick : user,
-      message : message
+  sendPrivateMessageToUser(user: string, message: string): Observable<boolean> {
+    const msgObj = {
+      nick: user,
+      message: message
     };
 
-    let observable = new Observable( observer => {
-      this.socket.emit("privatemsg", msgObj, (succeeded) => {
+    const observable = new Observable( observer => {
+      this.socket.emit('privatemsg', msgObj, (succeeded) => {
 
         this.addToMyMessages(user,this.userName, message);
         
         observer.next(succeeded);
       });
     });
-
     return observable;
   }
 
-  recievePrivateMessages() : Observable<Object> {
+  recievePrivateMessages(): Observable<Object> {
 
     let observable = new Observable( observer => {
       this.socket.on("recv_privatemsg", (fromUser, message) => {
@@ -252,7 +255,6 @@ export class ChatService {
         observer.next(msgObj);
       });
     });
-
     return observable;
   }
 

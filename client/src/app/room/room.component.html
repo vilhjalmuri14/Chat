@@ -1,7 +1,6 @@
 <div class="bg-info container-fluid" id="miniHeader">
   <div class="col-lg-10">
     <h1> {{roomName}} </h1>
-    <h2 *ngIf="isCreator">I am the creator of the room</h2>
   </div>
   <div class="col-lg-2">
     <button type="button" id="leaveRoomButton" class="btn btn-danger center" (click)="leaveRoom()">Leave this room</button>
@@ -42,9 +41,9 @@
               <span>
                 {{user}}
               </span>
-              <span class="btn-group" role="group">
-                <button type="button" class="btn btn-warning" *ngIf="isCreator" (click)="kickUser(user)">Kick</button>
-                <button type="button" class="btn btn-danger" *ngIf="isCreator" (click)="banUser(user)">Ban</button>
+              <span class="btn-group" role="group" id="kickBanButtons">
+                <button type="button" class="btn btn-warning" id="kickButton" *ngIf="isCreator" (click)="kickUser(user)">Kick</button>
+                <button type="button" class="btn btn-danger" id="banButotn" *ngIf="isCreator" (click)="banUser(user)">Ban</button>
               </span>
             </div>
           </ul>
