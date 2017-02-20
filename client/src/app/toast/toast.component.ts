@@ -12,7 +12,7 @@ export class ToastComponent {
     // Use with angular v2.2 or above
     this.toastr.setRootViewContainerRef(vcr);
   }
-    
+
   showSuccess() {
     this.toastr.success('You are awesome!', 'Success!');
   }
@@ -28,7 +28,7 @@ export class ToastComponent {
   showInfo() {
     this.toastr.info('Just some information for you.');
   }
-  
+
   showCustom() {
     this.toastr.custom('<span style="color: red">Message in red.</span>', null, {enableHTML: true});
   }

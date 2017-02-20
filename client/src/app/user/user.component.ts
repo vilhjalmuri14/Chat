@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { ActivatedRoute, Params }   from '@angular/router';
-import { ChatService } from "../chat.service";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Params } from '@angular/router';
+import { ChatService } from '../chat.service';
+import { Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 
 @Component({
@@ -12,13 +12,13 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 export class UserComponent implements OnInit {
 
   // the user current user is chatting whith
-  user : string;
+  user: string;
 
   newMessage: string;
   messages: Object[] = [];
 
-  constructor(private chatService: ChatService, private route: ActivatedRoute, 
-              private router: Router, public toastr: ToastsManager, vcr: ViewContainerRef) { 
+  constructor(private chatService: ChatService, private route: ActivatedRoute,
+              private router: Router, public toastr: ToastsManager, vcr: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(vcr);
   }
 
@@ -38,29 +38,24 @@ export class UserComponent implements OnInit {
     });
   }
 
-  leaveUser() {  
-    this.router.navigate(["/rooms"]);
+  leaveUser() {
+    this.router.navigate(['/rooms']);
   }
 
   scrollToBottom(id) {
-    var element = document.getElementById(id);
+    const element = document.getElementById(id);
     element.scrollTop = element.scrollHeight - element.clientHeight;
   }
 
   sendMessage() {
     this.chatService.sendPrivateMessageToUser(this.user, this.newMessage).subscribe(succeeded => {
-      if(!succeeded) {
+      if (!succeeded) {
         // todo send toaster
-      }
-      else {
+      } else {
         // refresh the chat
         this.messages = this.chatService.getAllMessagesFromUser(this.user);
       }
     });
-
-    
-
-    this.newMessage = "";
+    this.newMessage = '';
   }
-
 }
