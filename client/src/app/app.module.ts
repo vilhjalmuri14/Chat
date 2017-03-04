@@ -13,11 +13,6 @@ import { ChatService } from './chat.service';
 import { ToastComponent } from './toast/toast.component';
 import { UserComponent } from './user/user.component';
 
-const options: ToastOptions = new ToastOptions({
-  animate: 'flyRight',
-  positionClass: 'toast-bottom-right',
-});
-
 @NgModule({
   declarations: [
     AppComponent,
